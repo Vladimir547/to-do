@@ -1,3 +1,79 @@
-li {
-    font-style: roboto;
+
+@font-face {
+    font-family: 'GothamBook';
+    src: url('../font/Gotham-Book.woff2') format('woff2'),
+        url('../font/Gotham-Book.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+    font-family: 'GothamBook';
+}
+.container{
+    width: 90%;
+    margin: auto;
+    padding: 0px 10px;
+}
+.todos {
+    display:flex;
+    padding-top: 10px;
+}
+.todo__wrapper {
+    background-color: #ebecf0;
+    padding: 10px;
+    border-radius: 5px;
+    width:20%;
+}
+.todo__title {
+    display: flex;
+    justify-content: space-between;
+}
+.task {
+    width: 100%;
+    padding: 10px 5px;
+    margin-top: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.task:hover {
+    background-color: #8b8d94;
+}
+.task__icons i{
+    cursor: pointer;
+}
+.task__icons i:hover{
+    color:#c3c4c7;
+}
+.form {
+    margin-top: 10px;
+    display: none;;
+}
+.form__title, .form__description {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+}
+.form__description {
+    margin-top: 10px;
+    resize: none;
+}
+.form__submit {
+    width: 40%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: chartreuse;
+    border: none;
+    border-radius: 10px;
+}
+.form__submit:hover {
+    background-color: #c8f7cd;
+}
+.todo__open {
+    margin-top: 10px;
+}
+.todo__add{
+    color:#000000;
 }
