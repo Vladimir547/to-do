@@ -18,23 +18,60 @@
 					<h3>To-do</h3>
 					<a href=''>...</a>
 				</div>
-				<div class="todo__task task">
-					<p>ger</p>
-					<div class="task__icons">
-						<i class='icon-view-show'></i>
-						<i class='icon-pencil'></i>
-						<i class='icon-close'></i>
-					</div>
-				</div>
-				<form action="" class="todo__form form">
+				<div class="tasks"></div>
+				<form action="" class="todo__form form" data-status="todo">
 					<input type="text" class="form__title" placeholder="enter the title for this card">
 					<textarea name="description" class="form__description" placeholder="enter the description for this card"></textarea>
-					<input type="submit" class="form__submit" name="sub" value="Add card">
+					<div class='submit__align'>
+						<input type="submit" class="form__submit" name="sub" value="Add card">
+						<i class='icon-close form__close'></i>
+					</div>
 				</form>
 				<div class="todo__open">
 					<a href="" class="todo__add"><i class="icon-plus"></i> add card</a>
 				</div>
 			</div>
+			<div class="todo__wrapper">
+				<div class="todo__title">
+					<h3>Doing</h3>
+					<a href=''>...</a>
+				</div>
+				<div class="doing"></div>
+				<form action="" class="todo__form form" data-status="doing">
+					<input type="text" class="form__title" placeholder="enter the title for this card">
+					<textarea name="description" class="form__description" placeholder="enter the description for this card"></textarea>
+					<div class='submit__align'>
+						<input type="submit" class="form__submit" name="sub" value="Add card">
+						<i class='icon-close form__close'></i>
+					</div>
+				</form>
+				<div class="todo__open">
+					<a href="" class="todo__add"><i class="icon-plus"></i> add card</a>
+				</div>
+			</div>
+			<div class="todo__wrapper">
+				<div class="todo__title">
+					<h3>Deleted</h3>
+					<a href=''>...</a>
+				</div>
+				<div class="deleted"></div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-wrapper">
+		<div class="modal">
+			<div class='modal-content'>
+				<p >titke: <span id="modal-title"></span></p>
+				<p>description: <span id="modal-description"></span></p>
+			</div>
+			<form action="" class="edit-form">
+				<label for="edit-form__title"> Edit title</label>
+				<input type="text" id="edit-form__title" name="editName" placeholder="edit the title for this card">
+				<label for="edit-form__description"> Edit description</label>
+				<textarea id="edit-form__description" name="editName" placeholder="edit the description for this card"></textarea>
+				<input type="submit" name="edit" value="edit" id="edit-form__submit">
+			</form>
+			<a href="" class='modal-close'><i class='icon-close'></i></a>
 		</div>
 	</div>
 

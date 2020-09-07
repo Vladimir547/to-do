@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?nq8k2f');
-  src:  url('fonts/icomoon.eot?nq8k2f#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?nq8k2f') format('truetype'),
-    url('fonts/icomoon.woff?nq8k2f') format('woff'),
-    url('fonts/icomoon.svg?nq8k2f#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?z7nu0m');
+  src:  url('fonts/icomoon.eot?z7nu0m#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?z7nu0m') format('truetype'),
+    url('fonts/icomoon.woff?z7nu0m') format('woff'),
+    url('fonts/icomoon.svg?z7nu0m#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -36,4 +36,7 @@ i {
 }
 .icon-pencil:before {
   content: "\f040";
+}
+.icon-point-right:before {
+  content: "\ea04";
 }

@@ -16,13 +16,21 @@ body {
 }
 .todos {
     display:flex;
+    align-items: flex-start;
     padding-top: 10px;
 }
+
 .todo__wrapper {
     background-color: #ebecf0;
     padding: 10px;
     border-radius: 5px;
     width:20%;
+    display: flex;
+    flex-direction: column;
+    min-height: 88px;
+}
+.todo__wrapper + .todo__wrapper{
+    margin-left:10px;
 }
 .todo__title {
     display: flex;
@@ -37,18 +45,25 @@ body {
     display: flex;
     justify-content: space-between;
 }
+
 .task:hover {
     background-color: #8b8d94;
 }
 .task__icons i{
     cursor: pointer;
 }
+.task__icons i + i{
+    margin-left: 5px;
+}
+#hide{
+    display: none;
+}
 .task__icons i:hover{
     color:#c3c4c7;
 }
 .form {
     margin-top: 10px;
-    display: none;;
+    display: none;
 }
 .form__title, .form__description {
     width: 100%;
@@ -62,11 +77,19 @@ body {
 }
 .form__submit {
     width: 40%;
-    margin-top: 10px;
     padding: 10px;
     background-color: chartreuse;
     border: none;
     border-radius: 10px;
+}
+.submit__align {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+.submit__align i{
+    margin-left: 20px;
+    cursor: pointer;
 }
 .form__submit:hover {
     background-color: #c8f7cd;
@@ -76,4 +99,57 @@ body {
 }
 .todo__add{
     color:#000000;
+}
+.modal-wrapper {
+    display: none;
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(128, 128, 128, .3);
+}
+.modal {
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    margin-right: -50%;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ebecf0;
+}
+.modal-content {
+    padding: 10px;
+    margin-right: 20px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: 400px;
+}
+.edit-form{
+    display: flex;
+    flex-direction: column;
+}
+#edit-form__title, #edit-form__description {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+}
+#edit-form__description {
+    margin-top: 10px;
+    resize: none;
+}
+#edit-form__submit {
+    margin-top: 10px;
+    width: 40%;
+    padding: 10px;
+    background-color: chartreuse;
+    border: none;
+    border-radius: 10px;
 }
