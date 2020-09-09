@@ -77,12 +77,15 @@ function moveCard (card) {
         doing.append(card);
     } else if (card.parentNode.classList.contains('doing')) {
         done.append(card);
-    } else {
+    } else if (card.parentNode.classList.contains('done')){
+        tasks.append(card);
+    }else {
+        const icons = card.querySelector('.task__icons');
+        const createNewDeleteBtn = document.createElement('i');
+        createNewDeleteBtn.classList.add(arrIcons[3]);
+        icons.append(createNewDeleteBtn);
         tasks.append(card);
     }
-    /*if(card.parentNode.closest('.deleted')) {
-        tasks.append(card);
-    }*/
 }
 todos.forEach((item, index) => {
     item.addEventListener('click', (e) => {
