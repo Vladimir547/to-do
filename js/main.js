@@ -1,10 +1,12 @@
-const addTodo = document.querySelectorAll('.todo__add');
-const todoForm = document.querySelectorAll('.todo__form');
-const closeForm = document.querySelectorAll('.form__close');
+const addTodo = [...document.querySelectorAll('.todo__add')];
+const todoForm = [...document.querySelectorAll('.todo__form')];
+const closeForm = [...document.querySelectorAll('.form__close')];
 const titleForm = document.querySelectorAll('.form__title');
+const todos = [...document.querySelectorAll('.todo')];
 const descriptionForm = document.querySelectorAll('.form__description');
 const tasks = document.querySelector('.tasks');
 const doing = document.querySelector('.doing');
+const done = document.querySelector('.done');
 const deleted = document.querySelector('.deleted');
 const modalWrapper = document.querySelector('.modal-wrapper');
 const modal = document.querySelector('.modal');
@@ -15,7 +17,7 @@ const modalTitle = document.querySelector('#modal-title');
 const editForm = document.querySelector('.edit-form');
 const editTitle = document.querySelector('#edit-form__title');
 const editDescription = document.querySelector('#edit-form__description');
-const arrIcons = ['icon-view-show', 'icon-pencil', 'icon-close'];
+const arrIcons = ['icon-view-show', 'icon-point-right', 'icon-pencil', 'icon-close'];
 const arr = [];
 let isShow = false;
 function addCard(title, description) {
@@ -23,6 +25,7 @@ function addCard(title, description) {
     const cardTitle = document.createElement('p');
     const cardDescription = document.createElement('p');
     const blockForIcons = document.createElement('div');
+    cardTitle.classList.add('title-text');
     cardTitle.innerHTML = title;
     cardDescription.innerHTML = description;
     blockForIcons.classList.add('task__icons');
@@ -32,76 +35,129 @@ function addCard(title, description) {
         blockForIcons.append(createIcon);
     });
     createNewCard.classList.add('task');
-    cardDescription.id = 'hide';
+    cardDescription.className = 'hide';
+    createNewCard.dataset.edit = 'false';
     createNewCard.append(cardTitle);
     createNewCard.append(cardDescription);
     createNewCard.append(blockForIcons);
-    createNewCard.addEventListener('click', (e) => {
-        if (e.target.closest('.icon-close')) {
-            deleted.append(createNewCard);
-            blockForIcons.remove();
-        }
-        if (e.target.closest('.icon-view-show')) {
-            modalWrapper.style.display = 'block';
-            editForm.style.display = 'none';
-            modalContent.style.display = 'block';
-            modaldescription.innerHTML = cardDescription.innerHTML;
-            modalTitle.innerHTML = cardTitle.innerHTML;
-        }
-        if (e.target.closest('.icon-pencil')) {
-            modalWrapper.style.display = 'block';
-            editForm.style.display = 'block';
-            modalContent.style.display = 'none';
-            editTitle.value = cardTitle.innerHTML;
-            editDescription.value = cardDescription.innerHTML;
-            editForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                cardDescription.innerHTML = editDescription.value;
-                cardTitle.innerHTML = editTitle.value;
-                closeModalFunc();
-            });
-        }
-    });
     return createNewCard;
 }
+function previewValues (card) {
+    const title = card.querySelector('.title-text');
+    const description = card.querySelector('.hide');
+    modalWrapper.style.display = 'block';
+    editForm.style.display = 'none';
+    modalContent.style.display = 'block';
+    modaldescription.innerHTML = description.innerHTML;
+    modalTitle.innerHTML = title.innerHTML;
+}
+function editValues (cards) {
+    cards.forEach(item => {
+        if (item.dataset.edit === 'true') {
+            const title = item.querySelector('.title-text');
+            const description = item.querySelector('.hide');
+            description.textContent = editDescription.value;
+            title.textContent = editTitle.value;
+            item.dataset.edit = 'false';
+        }
+    });
+}
+function showModalEdit (card) {
+    const title = card.querySelector('.title-text');
+    const description = card.querySelector('.hide');
+    modalWrapper.style.display = 'block';
+    editForm.style.display = 'block';
+    modalContent.style.display = 'none';
+    editTitle.value = title.innerHTML;
+    editDescription.value = description.innerHTML;
+    card.dataset.edit = 'true';
+}
+function moveCard (card) {
+    if(card.parentNode.classList.contains('tasks')) {
+        doing.append(card);
+    } else if (card.parentNode.classList.contains('doing')) {
+        done.append(card);
+    } else {
+        tasks.append(card);
+    }
+    /*if(card.parentNode.closest('.deleted')) {
+        tasks.append(card);
+    }*/
+}
+todos.forEach((item, index) => {
+    item.addEventListener('click', (e) => {
+        const card = e.target.closest('.task');
+        const blockIcons = card.querySelector('.task__icons');
+        if (e.target.closest('.icon-close')) {
+            const icons = blockIcons.querySelectorAll('i');
+            console.log(icons);
+            for ( let elem of icons) {
+                if(elem.classList.contains('icon-close')) {
+                    elem.remove();
+                }
+            }
+            deleted.append(card);
+        }
+        if (e.target.closest('.icon-view-show')) {
+            previewValues(card);
+        }
+        if (e.target.closest('.icon-point-right')) {
+            moveCard(card);
+        }
+        if (e.target.closest('.icon-pencil')) {
+            showModalEdit(card);
+        }
+    });
+});
+
+editForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const arrTasks = [...document.querySelectorAll('.task')];
+    editValues(arrTasks);
+    closeModalFunc();
+})
 function closeModalFunc() {
     modalWrapper.style.display = 'none';
     modaldescription.innerHTML = '';
     modalTitle.innerHTML = '';
 }
-console.log(addTodo);
-for ( let i = 0; i < addTodo.length; i++) {
-    addTodo[i].addEventListener('click', (e) => {
+addTodo.forEach((item) => {
+    item.addEventListener('click', (e) => {
         e.preventDefault();
-        todoForm[i].style.display = 'block';
-        addTodo[i].style.display = 'none';
+        const parent = item.parentNode;
+        parent.previousElementSibling.style.display = 'block';
+        item.style.display = 'none';
     });
-}
-for (let i = 0; i < closeForm.length; i++ ) {
-    closeForm[i].addEventListener('click', () => {
-        titleForm[i].value = '';
-        descriptionForm[i].value = '';
-        todoForm[i].style.display = 'none';
-        addTodo[i].style.display = 'block';
-    });
-}
+});
+closeForm.forEach((item,index) => {
+    item.addEventListener('click', () => {
+        titleForm[index].value = '';
+        descriptionForm[index].value = '';
+        todoForm[index].style.display = 'none';
+        addTodo[index].style.display = 'block';
+    })
+});
 
-for ( let i = 0; i < todoForm.length; i++) {
-    todoForm[i].addEventListener('submit', (e) => {
+todoForm.forEach((item, index) => {
+    item.addEventListener('submit', (e) => {
         e.preventDefault();
-        const newCard = addCard(titleForm[i].value, descriptionForm[i].value);
-        if(todoForm[i].dataset.status === 'todo') {
+        const newCard = addCard(titleForm[index].value, descriptionForm[index].value);
+        if (item.dataset.status === 'todo') {
             tasks.append(newCard);
         }
-        if(todoForm[i].dataset.status === 'doing') {
+        if (item.dataset.status === 'doing') {
             doing.append(newCard);
         }
-        titleForm[i].value = '';
-        descriptionForm[i].value = '';
-        todoForm[i].style.display = 'none';
-        addTodo[i].style.display = 'block';
+        if (item.dataset.status === 'done') {
+            done.append(newCard);
+        }
+        titleForm[index].value = '';
+        descriptionForm[index].value = '';
+        todoForm[index].style.display = 'none';
+        addTodo[index].style.display = 'block';
     });
-}
+});
+
 
 closeModal.addEventListener('click', (e) => {
     e.preventDefault();

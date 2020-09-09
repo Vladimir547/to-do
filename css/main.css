@@ -55,7 +55,7 @@ body {
 .task__icons i + i{
     margin-left: 5px;
 }
-#hide{
+.hide{
     display: none;
 }
 .task__icons i:hover{

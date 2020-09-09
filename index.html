@@ -18,7 +18,7 @@
 					<h3>To-do</h3>
 					<a href=''>...</a>
 				</div>
-				<div class="tasks"></div>
+				<div class="tasks todo"></div>
 				<form action="" class="todo__form form" data-status="todo">
 					<input type="text" class="form__title" placeholder="enter the title for this card">
 					<textarea name="description" class="form__description" placeholder="enter the description for this card"></textarea>
@@ -36,8 +36,26 @@
 					<h3>Doing</h3>
 					<a href=''>...</a>
 				</div>
-				<div class="doing"></div>
+				<div class="doing todo"></div>
 				<form action="" class="todo__form form" data-status="doing">
+					<input type="text" class="form__title" placeholder="enter the title for this card">
+					<textarea name="description" class="form__description" placeholder="enter the description for this card"></textarea>
+					<div class='submit__align'>
+						<input type="submit" class="form__submit" name="sub" value="Add card">
+						<i class='icon-close form__close'></i>
+					</div>
+				</form>
+				<div class="todo__open">
+					<a href="" class="todo__add"><i class="icon-plus"></i> add card</a>
+				</div>
+			</div>
+			<div class="todo__wrapper">
+				<div class="todo__title">
+					<h3>done</h3>
+					<a href=''>...</a>
+				</div>
+				<div class="done todo"></div>
+				<form action="" class="todo__form form" data-status="done">
 					<input type="text" class="form__title" placeholder="enter the title for this card">
 					<textarea name="description" class="form__description" placeholder="enter the description for this card"></textarea>
 					<div class='submit__align'>
@@ -54,7 +72,7 @@
 					<h3>Deleted</h3>
 					<a href=''>...</a>
 				</div>
-				<div class="deleted"></div>
+				<div class="deleted todo"></div>
 			</div>
 		</div>
 	</div>
