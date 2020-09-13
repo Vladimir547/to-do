@@ -90,7 +90,7 @@ todos.forEach((item, index) => {
         const blockIcons = card.querySelector('.task__icons');
         if (e.target.closest('.icon-close')) {
             const icons = blockIcons.querySelectorAll('i');
-            console.log(icons);
+            console.log(card);
             for ( let elem of icons) {
                 if(elem.classList.contains('icon-close')) {
                     elem.remove();
