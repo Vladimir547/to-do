@@ -18,25 +18,30 @@ const editForm = document.querySelector('.edit-form');
 const editTitle = document.querySelector('#edit-form__title');
 const editDescription = document.querySelector('#edit-form__description');
 const arrIcons = ['icon-view-show', 'icon-point-right', 'icon-pencil', 'icon-close'];
-const arr = [];
+const data = {tasks: [], doing: [], done: [], deleted: []};
 let isShow = false;
-function addCard(title, description) {
+function addCard(obj, wrap) {
     const createNewCard = document.createElement('div');
     const cardTitle = document.createElement('p');
     const cardDescription = document.createElement('p');
     const blockForIcons = document.createElement('div');
     cardTitle.classList.add('title-text');
-    cardTitle.innerHTML = title;
-    cardDescription.innerHTML = description;
+    cardTitle.innerHTML = obj.title;
+    cardDescription.innerHTML = obj.description;
     blockForIcons.classList.add('task__icons');
     arrIcons.forEach((item) => {
         const createIcon = document.createElement('i');
-        createIcon.classList.add(item);
-        blockForIcons.append(createIcon);
+        if (wrap === 'deleted' && item === 'icon-close') {
+            return false;
+        } else {
+            createIcon.classList.add(item);
+            blockForIcons.append(createIcon);
+        }
     });
     createNewCard.classList.add('task');
     cardDescription.className = 'hide';
     createNewCard.dataset.edit = 'false';
+    createNewCard.dataset.delete = 'false';
     createNewCard.append(cardTitle);
     createNewCard.append(cardDescription);
     createNewCard.append(blockForIcons);
@@ -51,17 +56,7 @@ function previewValues (card) {
     modaldescription.innerHTML = description.innerHTML;
     modalTitle.innerHTML = title.innerHTML;
 }
-function editValues (cards) {
-    cards.forEach(item => {
-        if (item.dataset.edit === 'true') {
-            const title = item.querySelector('.title-text');
-            const description = item.querySelector('.hide');
-            description.textContent = editDescription.value;
-            title.textContent = editTitle.value;
-            item.dataset.edit = 'false';
-        }
-    });
-}
+
 function showModalEdit (card) {
     const title = card.querySelector('.title-text');
     const description = card.querySelector('.hide');
@@ -73,22 +68,76 @@ function showModalEdit (card) {
     card.dataset.edit = 'true';
 }
 function moveCard (card) {
-    if(card.parentNode.classList.contains('tasks')) {
-        doing.append(card);
-    } else if (card.parentNode.classList.contains('doing')) {
-        done.append(card);
+    const cards = card.parentNode.querySelectorAll('.task');
+    cards.forEach((item, index) => {
+        if ( item === card) {
+            if(card.parentNode.classList.contains('tasks')) {
+                data.doing.push(...data.tasks.splice(index, 1));
+                newBoard(card.parentNode, data.tasks, 'todo');
+                newBoard(doing, data.doing, 'doing');
+            } else if (card.parentNode.classList.contains('doing')) {
+                data.done.push(...data.doing.splice(index, 1));
+                newBoard(card.parentNode, data.doing, 'doing');
+                newBoard(done, data.done, 'done');
+            } else if (card.parentNode.classList.contains('done')){
+                data.tasks.push(...data.done.splice(index, 1));
+                newBoard(card.parentNode, data.done, 'done');
+                newBoard(tasks, data.tasks, 'todo');
+            }else {
+                data.tasks.push(...data.deleted.splice(index, 1));
+                newBoard(card.parentNode, data.deleted, 'deleted');
+                newBoard(tasks, data.tasks, 'todo');
+            }
+        }
+    });
+    console.log(data);
+}
+
+function newBoard (currentWrap, currentArr, status) {
+    currentWrap.innerHTML = '';
+    currentArr.forEach(item => {
+        const newCard = addCard(item, status);
+        currentWrap.append(newCard);
+    });
+}
+function removeCard (currentWrap, card, cards) {
+    let currentArr = null;
+    let wrap = null;
+    if( currentWrap.classList.contains('tasks')) {
+        currentArr = data.tasks;
+        wrap = 'todo';
+    } else if (currentWrap.classList.contains('done')) {
+        wrap = 'done';
+        currentArr = data.done;
     } else {
-        tasks.append(card);
+        wrap = 'doing';
+        currentArr = data.doing;
     }
-    /*if(card.parentNode.closest('.deleted')) {
-        tasks.append(card);
-    }*/
+    cards.forEach((item, index) => {
+        if(item.dataset.delete === 'true') {
+            data.deleted.push(...currentArr.splice(index, 1));
+        }
+    });
+    deleted.innerHTML = '';
+    newBoard(currentWrap, currentArr, wrap);
+    newBoard(deleted, data.deleted, 'deleted');
+    /*currentWrap.innerHTML = '';*/
+}
+function editValues (cards, curent, wrap) {
+    cards.forEach((item, index) => {
+        if(item.dataset.edit === 'true') {
+            const title = item.querySelector('.title-text');
+            const description = item.querySelector('.hide');
+            curent.splice(index, 1, {'title': editTitle.value, 'description': editDescription.value});
+            newBoard(wrap, curent);
+        }
+    });
 }
 todos.forEach((item, index) => {
     item.addEventListener('click', (e) => {
         const card = e.target.closest('.task');
-        const blockIcons = card.querySelector('.task__icons');
         if (e.target.closest('.icon-close')) {
+<<<<<<< HEAD
             const icons = blockIcons.querySelectorAll('i');
             console.log(card);
             for ( let elem of icons) {
@@ -97,6 +146,13 @@ todos.forEach((item, index) => {
                 }
             }
             deleted.append(card);
+=======
+            const currentWrap = e.target.closest('.todo');
+            const cards = currentWrap.querySelectorAll('.task');
+
+            card.dataset.delete = 'true'
+            removeCard(currentWrap, card, cards);
+>>>>>>> master
         }
         if (e.target.closest('.icon-view-show')) {
             previewValues(card);
@@ -112,8 +168,29 @@ todos.forEach((item, index) => {
 
 editForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const arrTasks = [...document.querySelectorAll('.task')];
-    editValues(arrTasks);
+    let arrTasks = [...document.querySelectorAll('.task')];
+    let currentArr = null;
+    let cards = null;
+    let wrapper = null;
+    arrTasks.forEach((item )=> {
+        if (item.dataset.edit === 'true') {
+            if(item.parentNode.closest('.deleted')) {
+                currentArr = data.deleted;
+            }
+            if(item.parentNode.closest('.doing')) {
+                currentArr = data.doing;
+            }
+            if(item.parentNode.closest('.done')) {
+                currentArr = data.done;
+            } 
+            if (item.parentNode.closest('.tasks')){
+                currentArr = data.tasks;
+            }
+            wrapper = item.parentNode;
+            cards = [...wrapper.querySelectorAll('.task')];
+        }
+    });
+    editValues(cards, currentArr, wrapper);
     closeModalFunc();
 })
 function closeModalFunc() {
@@ -140,16 +217,22 @@ closeForm.forEach((item,index) => {
 
 todoForm.forEach((item, index) => {
     item.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const newCard = addCard(titleForm[index].value, descriptionForm[index].value);
+        e.preventDefault(); 
+        let wrapper = null;
         if (item.dataset.status === 'todo') {
-            tasks.append(newCard);
+            wrapper = 'todo';
+            data.tasks.push({'title': titleForm[index].value, 'description': descriptionForm[index].value});
+            tasks.append(addCard({'title': titleForm[index].value, 'description': descriptionForm[index].value}, wrapper));
         }
         if (item.dataset.status === 'doing') {
-            doing.append(newCard);
+            wrapper = 'doing';
+            data.doing.push({'title': titleForm[index].value, 'description': descriptionForm[index].value});
+            doing.append(addCard({'title': titleForm[index].value, 'description': descriptionForm[index].value}, wrapper));
         }
         if (item.dataset.status === 'done') {
-            done.append(newCard);
+            wrapper = 'done';
+            data.done.push({'title': titleForm[index].value, 'description': descriptionForm[index].value});
+            done.append(addCard({'title': titleForm[index].value, 'description': descriptionForm[index].value}, wrapper));
         }
         titleForm[index].value = '';
         descriptionForm[index].value = '';
