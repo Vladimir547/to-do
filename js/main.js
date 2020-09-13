@@ -137,22 +137,11 @@ todos.forEach((item, index) => {
     item.addEventListener('click', (e) => {
         const card = e.target.closest('.task');
         if (e.target.closest('.icon-close')) {
-<<<<<<< HEAD
-            const icons = blockIcons.querySelectorAll('i');
-            console.log(card);
-            for ( let elem of icons) {
-                if(elem.classList.contains('icon-close')) {
-                    elem.remove();
-                }
-            }
-            deleted.append(card);
-=======
             const currentWrap = e.target.closest('.todo');
             const cards = currentWrap.querySelectorAll('.task');
 
             card.dataset.delete = 'true'
             removeCard(currentWrap, card, cards);
->>>>>>> master
         }
         if (e.target.closest('.icon-view-show')) {
             previewValues(card);
