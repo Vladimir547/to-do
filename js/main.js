@@ -123,13 +123,13 @@ function removeCard (currentWrap, card, cards) {
     newBoard(deleted, data.deleted, 'deleted');
     /*currentWrap.innerHTML = '';*/
 }
-function editValues (cards, curent, wrap) {
+function editValues (cards, curent, wrap, status) {
     cards.forEach((item, index) => {
         if(item.dataset.edit === 'true') {
             const title = item.querySelector('.title-text');
             const description = item.querySelector('.hide');
             curent.splice(index, 1, {'title': editTitle.value, 'description': editDescription.value});
-            newBoard(wrap, curent);
+            newBoard(wrap, curent, status);
         }
     });
 }
@@ -160,26 +160,31 @@ editForm.addEventListener('submit', (e) => {
     let arrTasks = [...document.querySelectorAll('.task')];
     let currentArr = null;
     let cards = null;
+    let wrap = null;
     let wrapper = null;
     arrTasks.forEach((item )=> {
         if (item.dataset.edit === 'true') {
             if(item.parentNode.closest('.deleted')) {
+                wrap = 'deleted';
                 currentArr = data.deleted;
             }
             if(item.parentNode.closest('.doing')) {
+                wrap = 'todo';
                 currentArr = data.doing;
             }
             if(item.parentNode.closest('.done')) {
+                wrap = 'todo';
                 currentArr = data.done;
             } 
             if (item.parentNode.closest('.tasks')){
+                wrap = 'todo';
                 currentArr = data.tasks;
             }
             wrapper = item.parentNode;
             cards = [...wrapper.querySelectorAll('.task')];
         }
     });
-    editValues(cards, currentArr, wrapper);
+    editValues(cards, currentArr, wrapper, wrap);
     closeModalFunc();
 })
 function closeModalFunc() {
