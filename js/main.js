@@ -162,6 +162,7 @@ editForm.addEventListener('submit', (e) => {
     let cards = null;
     let wrap = null;
     let wrapper = null;
+    let card = null;
     arrTasks.forEach((item )=> {
         if (item.dataset.edit === 'true') {
             if(item.parentNode.closest('.deleted')) {
@@ -188,6 +189,12 @@ editForm.addEventListener('submit', (e) => {
     closeModalFunc();
 })
 function closeModalFunc() {
+    const arrTasks = [...document.querySelectorAll('.task')];
+    arrTasks.forEach(item => {
+        if(item.dataset.edit === 'true') {
+            item.dataset.edit = 'false';
+        }
+    });
     modalWrapper.style.display = 'none';
     modaldescription.innerHTML = '';
     modalTitle.innerHTML = '';
